@@ -10,41 +10,59 @@ import heapq
 
 
 def order_festival_alerts(alerts: list[tuple[int, str]]) -> list[str]:
-    """
-    Return alert titles in the order they should be handled.
+    heap = alerts[:]
+    heapq.heapify(heap)
 
-    Each alert is a tuple:
-        (priority, title)
+    result = []
 
-    Smaller priority numbers should be handled first.
-    """
-    raise NotImplementedError
+    while heap:
+        priority, title = heapq.heappop(heap)
+        result.append(title)
+
+    return result
 
 
 def order_festival_alerts_stable(alerts: list[tuple[int, str]]) -> list[str]:
-    """
-    Return alert titles in the order they should be handled.
+    heap = []
 
-    If two alerts have the same priority, keep the original input order.
-    """
-    raise NotImplementedError
+    for index, (priority, title) in enumerate(alerts):
+        heapq.heappush(heap, (priority, index, title))
+
+    result = []
+
+    while heap:
+        priority, index, title = heapq.heappop(heap)
+        result.append(title)
+
+    return result
 
 
 def top_k_festival_alerts(alerts: list[tuple[int, str]], k: int) -> list[str]:
-    """
-    Return the titles of the k most urgent alerts.
+    if k <= 0:
+        return []
 
-    If k <= 0, return an empty list.
-    If k is larger than the number of alerts, return as many as possible.
-    """
-    raise NotImplementedError
+    heap = []
+
+    for index, (priority, title) in enumerate(alerts):
+        heapq.heappush(heap, (priority, index, title))
+
+    result = []
+
+    for _ in range(min(k, len(heap))):
+        priority, index, title = heapq.heappop(heap)
+        result.append(title)
+
+    return result
 
 
 def peek_next_festival_alert(alerts: list[tuple[int, str]]) -> str | None:
-    """
-    Return the title of the next alert to handle without permanently
-    changing the original input.
+    if not alerts:
+        return None
 
-    If alerts is empty, return None.
-    """
-    raise NotImplementedError
+    heap = []
+
+    for index, (priority, title) in enumerate(alerts):
+        heapq.heappush(heap, (priority, index, title))
+
+    priority, index, title = heapq.heappop(heap)
+    return title
