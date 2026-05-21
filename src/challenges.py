@@ -10,6 +10,11 @@ import heapq
 
 
 def order_festival_alerts(alerts: list[tuple[int, str]]) -> list[str]:
+    """
+    Return alert titles ordered from most urgent
+    to least urgent.
+    """
+
     heap = alerts[:]
     heapq.heapify(heap)
 
@@ -22,7 +27,16 @@ def order_festival_alerts(alerts: list[tuple[int, str]]) -> list[str]:
     return result
 
 
-def order_festival_alerts_stable(alerts: list[tuple[int, str]]) -> list[str]:
+def order_festival_alerts_stable(
+    alerts: list[tuple[int, str]]
+) -> list[str]:
+    """
+    Return alert titles ordered by priority.
+
+    Alerts with the same priority keep their
+    original input order.
+    """
+
     heap = []
 
     for index, (priority, title) in enumerate(alerts):
@@ -37,7 +51,14 @@ def order_festival_alerts_stable(alerts: list[tuple[int, str]]) -> list[str]:
     return result
 
 
-def top_k_festival_alerts(alerts: list[tuple[int, str]], k: int) -> list[str]:
+def top_k_festival_alerts(
+    alerts: list[tuple[int, str]],
+    k: int
+) -> list[str]:
+    """
+    Return the k most urgent alert titles.
+    """
+
     if k <= 0:
         return []
 
@@ -55,14 +76,22 @@ def top_k_festival_alerts(alerts: list[tuple[int, str]], k: int) -> list[str]:
     return result
 
 
-def peek_next_festival_alert(alerts: list[tuple[int, str]]) -> str | None:
+def peek_next_festival_alert(
+    alerts: list[tuple[int, str]]
+) -> str | None:
+    """
+    Return the next alert without changing
+    the original input.
+    """
+
     if not alerts:
         return None
 
-    heap = []
+    heap = [
+        (priority, index, title)
+        for index, (priority, title) in enumerate(alerts)
+    ]
 
-    for index, (priority, title) in enumerate(alerts):
-        heapq.heappush(heap, (priority, index, title))
+    heapq.heapify(heap)
 
-    priority, index, title = heapq.heappop(heap)
-    return title
+    return heap[0][2]
